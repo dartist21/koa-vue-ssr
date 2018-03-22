@@ -1,32 +1,19 @@
 const Koa = require('koa');
 const Router = require('koa-router');
-const Vue = require('vue');
-const { createRenderer } = require('vue-server-renderer');
+const renderer = require('vue-server-renderer').createRenderer();
 const { asyncReadFile } = require('./helpers');
+const createApp = require('./app');
 
 const PORT = 3001;
 const app = new Koa();
 const router = new Router();
 
-router.get('/', async (ctx, next) => {
+router.get('*', async (ctx, next) => {
   try {
-    const app = new Vue({
-      template: `<div>Hello SSR!</div>`,
-    });
+    const context = { url: ctx.request.url };
+    const app = createApp(context);
 
-    const context = {
-      title: 'koa-vue-ssr',
-      meta: `
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      `,
-    };
-
-    const renderer = createRenderer({
-      template: await asyncReadFile('./index.html', 'utf8'),
-    });
-
-    ctx.body = await renderer.renderToString(app, context);
+    ctx.body = await renderer.renderToString(app);
   } catch (e) {
     console.log(e);
   }
