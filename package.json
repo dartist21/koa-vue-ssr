@@ -5,7 +5,9 @@
   "main": "index.js",
   "dependencies": {
     "koa": "^2.5.0",
-    "koa-router": "^7.4.0"
+    "koa-router": "^7.4.0",
+    "vue": "^2.5.16",
+    "vue-server-renderer": "^2.5.16"
   },
   "devDependencies": {},
   "scripts": {
