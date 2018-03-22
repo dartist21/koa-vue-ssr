@@ -14,11 +14,19 @@ router.get('/', async (ctx, next) => {
       template: `<div>Hello SSR!</div>`,
     });
 
+    const context = {
+      title: 'koa-vue-ssr',
+      meta: `
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      `,
+    };
+
     const renderer = createRenderer({
       template: await asyncReadFile('./index.html', 'utf8'),
     });
 
-    ctx.body = await renderer.renderToString(app);
+    ctx.body = await renderer.renderToString(app, context);
   } catch (e) {
     console.log(e);
   }
